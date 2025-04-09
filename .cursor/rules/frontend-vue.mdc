@@ -1,0 +1,101 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Vue 3 Frontend Development Guidelines
+
+You are an expert in **TypeScript, Node.js, Vite, Vue 3, Vue Router, Pinia, VueUse, TailwindCSS, Shadcn Vue, Radix Vue, and Tanstack Query**. Adhere to the following best practices for building high-quality, maintainable, and performant applications.
+
+## Code Style and Structure
+
+-   Write concise, maintainable, and technically accurate TypeScript code.
+-   Use **Vue 3 Composition API** with `<script setup>` syntax exclusively. Avoid Options API.
+-   Favor declarative programming patterns.
+-   Employ iteration and modularization (composables) to adhere to DRY principles. Avoid code duplication.
+-   Use descriptive variable names, often incorporating auxiliary verbs (e.g., `isLoading`, `hasError`, `canSubmit`).
+-   Organize files systematically: each file should contain only related content (e.g., exported component, composables, helpers, static content, types). Follow a feature-based or domain-based structure where appropriate.
+
+## Naming Conventions
+
+-   Use **lowercase-kebab-case** for directories (e.g., `components/user-profile`, `composables/use-auth`).
+-   Use **PascalCase** for component file names and component names themselves (e.g., `UserProfileCard.vue`).
+-   Use **camelCase** for composables, functions, and variables (e.g., `useUserProfile.ts`, `fetchUserData`).
+
+## TypeScript Usage
+
+-   Use TypeScript for all code.
+-   Prefer `type` aliases over `interface` for consistency, unless `interface` specific features like declaration merging are needed.
+-   Avoid `enum`; use `const` objects with `as const` for better type safety, tree-shaking, and flexibility.
+    ```typescript
+    // Instead of: enum Status { Pending, Success, Error }
+    const STATUS = {
+      PENDING: 'pending',
+      SUCCESS: 'success',
+      ERROR: 'error',
+    } as const;
+    type Status = typeof STATUS[keyof typeof STATUS];
+    ```
+-   Leverage TypeScript's inference but provide explicit types for function signatures, props, and complex data structures.
+-   Use `PropType` from `vue` for defining prop types within `defineProps`.
+
+## Syntax and Formatting
+
+-   Use arrow functions for component methods, computed properties, and callbacks.
+-   Use template syntax for declarative rendering. Keep template logic minimal; move complex logic to computed properties or functions in `<script setup>`.
+-   Follow configured linter (e.g., ESLint) and formatter (e.g., Prettier) rules strictly.
+
+## UI and Styling
+
+-   Utilize **Shadcn Vue** and **Radix Vue** for building accessible and unstyled UI primitives.
+-   Use **TailwindCSS** for all styling. Apply utilities directly in templates.
+-   Implement responsive design using Tailwind's responsive modifiers (e.g., `md:`, `lg:`). Adopt a mobile-first approach.
+-   Create reusable UI components by composing Shadcn/Radix primitives and applying Tailwind styles.
+
+## State Management
+
+-   Use **Pinia** for global or shared state management.
+-   Define stores within a dedicated `stores` directory, often organized by feature or domain.
+-   Keep stores focused on specific slices of state.
+-   Leverage Pinia's built-in TypeScript support.
+
+## Data Fetching
+
+-   Use **Tanstack Query (Vue Query)** for server state management: data fetching, caching, synchronization, and background updates.
+-   Define query keys carefully for effective caching and invalidation.
+-   Utilize hooks like `useQuery` and `useMutation`.
+-   Implement proper loading, error, and success states handling provided by Tanstack Query.
+
+## Routing
+
+-   Use **Vue Router** for client-side routing.
+-   Define routes clearly, potentially using lazy loading for route components to improve initial load time.
+    ```typescript
+    // Example lazy-loaded route
+    const UserProfile = () => import('@/views/UserProfile.vue');
+    const routes = [
+      { path: '/user/:id', name: 'UserProfile', component: UserProfile },
+    ];
+    ```
+-   Utilize router guards for authentication and authorization checks.
+
+## Composables and Utilities
+
+-   Leverage **VueUse** functions for common tasks (e.g., `useLocalStorage`, `useDebounceFn`, `onClickOutside`).
+-   Create custom composables (`useSomething.ts`) in a dedicated `composables` directory to encapsulate and reuse reactive logic. Ensure composables are well-typed and testable.
+
+## Performance Optimization
+
+-   Optimize **Core Web Vitals** (LCP, CLS, FID). Use tools like Lighthouse.
+-   Use **Vite's** features for optimized builds (code splitting, tree shaking).
+-   Implement **code splitting** via dynamic imports (`import()`) for routes and non-critical components.
+-   Wrap async components (e.g., lazy-loaded routes) in `<Suspense>` with appropriate fallback UI where needed.
+-   Optimize images: use modern formats (WebP, AVIF), provide `width` and `height` attributes, and implement lazy loading (`loading="lazy"`).
+-   Use Tanstack Query's caching effectively to minimize network requests.
+-   Debounce or throttle expensive operations or frequent events (e.g., search input, window resize) using utilities like `useDebounceFn` from VueUse.
+
+## Key Conventions
+
+-   Follow official Vue.js, Pinia, Vue Router, Tanstack Query, and TypeScript documentation for best practices.
+-   Write unit and component tests (e.g., using Vitest and Vue Testing Library).
+-   Ensure accessibility (A11y) by using semantic HTML, ARIA attributes where necessary (though Radix Vue handles much of this), and ensuring keyboard navigability.
