@@ -3,24 +3,29 @@ import { cva, type VariantProps } from 'class-variance-authority'
 export { default as Button } from './Button.vue'
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive cursor-pointer",
+  'focus-visible:ring-primary-50 focus-visible:ring-offset-primary-50 inline-flex cursor-pointer items-center justify-center gap-2 rounded-md text-[0.9375rem] leading-6 font-semibold whitespace-nowrap transition-colors focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
+        default:
+          'bg-primary text-primary-foreground focus-visible:bg-primary-50 disabled:bg-black-25 hover:bg-primary/90 focus-visible:ring-primary-50 focus-visible:ring-offset-primary-50 p-0',
+        secondary:
+          'bg-accent text-accent-foreground hover:bg-accent-50 focus-visible:ring-accent-50 focus-visible:ring-offset-accent-50',
         destructive:
-          'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
-        outline:
-          'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-        secondary: 'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+          'border-destructive bg-background text-destructive hover:border-destructive/90 hover:text-destructive/90 rounded-none border-b text-lg',
+        outline: 'hover:bg-white-50 hover:text-black-100',
+        ghost:
+          'hover:bg-accent hover:text-accent-foreground focus-visible:ring-accent-50 focus-visible:ring-offset-accent-50',
         link: 'text-primary underline-offset-4 hover:underline',
+        action:
+          'bg-white-50 hover:bg-white-25 [&_svg]:text-black-75 size-full flex-col rounded-[0.625rem] focus-visible:ring-4 focus-visible:ring-inset disabled:opacity-25 [&_svg]:size-32',
       },
       size: {
-        default: 'h-9 px-4 py-2 has-[>svg]:px-3',
-        sm: 'h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5',
-        lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
-        icon: 'size-9',
+        default: 'px-8 py-2',
+        sm: 'rounded-md px-8 py-1',
+        lg: 'rounded-md px-8 py-2',
+        icon: 'size-10',
+        link: 'px-2 py-1',
       },
     },
     defaultVariants: {

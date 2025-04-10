@@ -15,10 +15,7 @@ import { useIndexDB } from '@/libs/composables'
  */
 export const useMutation = <Key extends keyof IndexDBMutationsType, TError = StandardizedApiError>(
   mutation: Key,
-  options?: Omit<
-    UseMutationOptions<DataForMutation<Key>, TError, GetMutationParams<Key>>,
-    'mutationKey' | 'mutationFn'
-  > & {
+  options?: UseMutationOptions<DataForMutation<Key>, TError, GetMutationParams<Key>> & {
     meta?: Partial<ExtendedQueryMeta>
   },
 ) => {

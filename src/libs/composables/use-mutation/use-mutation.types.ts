@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { IndexDBMutationsType } from '@/api/actions'
 import type { Unwrap } from '@/api/types/types'
 
@@ -6,8 +7,8 @@ export type DataForMutation<TMutationKey extends keyof IndexDBMutationsType> = U
 >
 
 export type GetMutationParams<Key extends keyof IndexDBMutationsType> =
-  ReturnType<IndexDBMutationsType[Key]> extends (value: infer Params) => never
+  ReturnType<IndexDBMutationsType[Key]> extends (value: infer Params) => any
     ? Params extends Parameters<ReturnType<IndexDBMutationsType[keyof IndexDBMutationsType]>>[0]
       ? Params
-      : never
+      : any
     : never

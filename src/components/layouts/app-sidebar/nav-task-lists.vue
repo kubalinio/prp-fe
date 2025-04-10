@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { List } from '@/api/types'
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
+import type { List } from '@/api/types'
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -11,14 +13,23 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { Button } from '@/components/ui/button'
-import { useRouter } from 'vue-router'
 import { cn } from '@/libs/utils'
-import { computed } from 'vue'
+
+import {
+  TaskListCreate,
+  TaskListCreateContent,
+  TaskListCreateForm,
+  TaskListCreateHeader,
+  TaskListCreateTrigger,
+} from '@/features/shared/components/task-list-create-dialog'
+import { useTaskListCreate } from '@/features/shared/composables/use-task-list-create'
+
 defineProps<{
   tasks: List[]
 }>()
 
 const router = useRouter()
+const { openDialog, setOpenDialog, onSubmit, isLoading } = useTaskListCreate()
 const { toggleSidebar, isMobile } = useSidebar()
 
 const isActive = computed(() => (path: string) => {
@@ -36,7 +47,19 @@ const handleLinkClick = (list: List) => {
 
 <template>
   <SidebarGroup>
-    <SidebarGroupLabel>Tasks List</SidebarGroupLabel>
+    <SidebarGroupLabel className="mb-2 flex items-center justify-between text-sm">
+      <span class="text-xs font-semibold">Task Lists</span>
+
+      <TaskListCreate v-model="openDialog" @update:model-value="setOpenDialog">
+        <TaskListCreateTrigger />
+
+        <TaskListCreateContent>
+          <TaskListCreateHeader>Create Task List</TaskListCreateHeader>
+
+          <TaskListCreateForm :isLoading="isLoading" @submit="onSubmit" />
+        </TaskListCreateContent>
+      </TaskListCreate>
+    </SidebarGroupLabel>
 
     <SidebarGroupContent>
       <SidebarMenu>

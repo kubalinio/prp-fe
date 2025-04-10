@@ -46,9 +46,9 @@ const handleRedirectToEdit = () => {
 
     <DropdownMenuContent align="end" class="w-auto">
       <DropdownMenuGroup>
-        <DropdownMenuItem @click="handleRedirectToDetails"> Details </DropdownMenuItem>
+        <DropdownMenuItem @click="handleRedirectToDetails">Details</DropdownMenuItem>
 
-        <DropdownMenuItem @click="handleRedirectToEdit"> Edit </DropdownMenuItem>
+        <DropdownMenuItem @click="handleRedirectToEdit">Edit</DropdownMenuItem>
 
         <DropdownMenuSeparator />
 

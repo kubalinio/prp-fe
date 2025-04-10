@@ -2,7 +2,7 @@
 import { useGetTaskLists } from '@/libs/composables'
 import { data } from './data'
 import NavMain from './nav-main.vue'
-import NavWorkspaces from './nav-workspaces.vue'
+import NavTaskLists from './nav-task-lists.vue'
 import TeamSwitcher from './team-switcher.vue'
 
 import {
@@ -28,7 +28,7 @@ const { data: taskLists } = useGetTaskLists()
 
     <SidebarContent>
       <!-- <NavFavorites :favorites="data.favorites" /> -->
-      <NavWorkspaces :tasks="taskLists?.data ?? []" />
+      <NavTaskLists :tasks="taskLists?.data ?? []" />
       <!-- <NavSecondary :items="data.navSecondary" class="mt-auto" /> -->
     </SidebarContent>
     <SidebarRail />

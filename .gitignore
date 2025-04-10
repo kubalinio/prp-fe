@@ -33,4 +33,4 @@ vitest.config.*.timestamp*
 
 .env
 .env.*
-.cursorrules
+.cursor
