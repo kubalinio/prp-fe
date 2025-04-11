@@ -6,14 +6,15 @@ import type {
 } from '@/api/actions/tasks/task.types'
 
 import { taskQueries } from '@/api/actions/tasks/task.queries'
-import { useIndexDB, useSuspenseQuery } from '@/libs/composables'
+import { useIndexDB, useQuery, useSuspenseQuery } from '@/libs/composables'
 import type { GenericQueryOptions } from '../use-suspense-query/use-suspense-query.types'
+import { type Ref } from 'vue'
 
 /**
  * Hook to get all task lists
  */
 const useGetTaskLists = (
-  filters?: TasksFilterOptions,
+  filters?: Ref<TasksFilterOptions>,
   options?: GenericQueryOptions<TaskListsResponse>,
 ) => {
   const queryClient = useQueryClient()
@@ -32,13 +33,16 @@ const useGetTaskLists = (
 /**
  * Hook to get a single task list by ID
  */
-const useGetTaskList = (id: string, options?: GenericQueryOptions<TaskListResponse>) => {
+const useGetTaskList = (id: Ref<string>, options?: GenericQueryOptions<TaskListResponse>) => {
   const queryClient = useQueryClient()
   const { client } = useIndexDB()
 
-  const query = useSuspenseQuery({ ...taskQueries.getTaskList(id), ...options })
+  const query = useQuery({
+    ...taskQueries.getTaskList(id),
+    ...options,
+  })
 
-  const resetTaskList = () =>
+  const resetTaskList = (id: string) =>
     queryClient.invalidateQueries({
       queryKey: taskQueries.getTaskList(id).queryKey,
     })
@@ -46,16 +50,28 @@ const useGetTaskList = (id: string, options?: GenericQueryOptions<TaskListRespon
   const refetchTaskList = (filters?: TasksFilterOptions) =>
     queryClient
       .fetchQuery({
-        queryKey: [...taskQueries.getTaskList(id).queryKey, filters],
-        queryFn: taskQueries.getTaskList(id, filters).queryFn(client.value!),
+        queryKey: [...taskQueries.getTaskList(id.value).queryKey, filters],
+        queryFn: taskQueries.getTaskList(id.value, filters).queryFn(client.value!),
       })
       .then((res) => {
-        queryClient.setQueryData(taskQueries.getTaskList(id).queryKey, res)
+        queryClient.setQueryData(taskQueries.getTaskList(id.value).queryKey, res)
 
         return res
       })
 
-  return { ...query, resetTaskList, refetchTaskList }
+  const refetch = (oldId: string) => {
+    queryClient.cancelQueries({
+      queryKey: taskQueries.getTaskList(oldId).queryKey,
+    })
+
+    queryClient.invalidateQueries({
+      queryKey: taskQueries.getTaskList(id.value).queryKey,
+    })
+
+    query.refetch()
+  }
+
+  return { ...query, resetTaskList, refetchTaskList, refetch }
 }
 
 export { useGetTaskLists, useGetTaskList }

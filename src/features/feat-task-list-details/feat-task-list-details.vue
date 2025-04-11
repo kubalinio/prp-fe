@@ -1,15 +1,25 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { SidebarTrigger } from '@/components/ui/sidebar'
+import { Separator } from '@/components/ui/separator'
 
-const route = useRoute()
+import { TaskListBreadcrumb } from './components/breadcrumb'
+import { Container } from '@/components/ui/container'
+import { TaskListHeader } from './components/task-list-header'
+import { TaskTable } from './components/task-table'
 </script>
 
 <template>
-  <div>
-    <h1>Task List Details</h1>
+  <header className="bg-background sticky top-0 z-10 flex shrink-0 items-center gap-2 border-b p-4">
+    <SidebarTrigger className="-ml-1" />
 
-    <p>{{ route.params.id }}</p>
-  </div>
+    <Separator orientation="vertical" className="mr-2 h-4" />
+
+    <TaskListBreadcrumb />
+  </header>
+
+  <Container as="section">
+    <TaskListHeader />
+
+    <TaskTable />
+  </Container>
 </template>
-
-<style lang=""></style>

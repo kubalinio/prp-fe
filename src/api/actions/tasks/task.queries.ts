@@ -11,6 +11,7 @@ import type {
 import { getDB } from '@/api/indexdb'
 import { createNotFoundError } from '@/api/utils/error-handler'
 import { queryFactoryOptions } from '@/api/utils/query-factory-options'
+import { isRef, type Ref } from 'vue'
 
 const getAllTaskLists = (client: IndexDBClient) => async (): Promise<TaskListsResponse> => {
   const db = client || (await getDB())
@@ -186,24 +187,25 @@ const getTask =
 
 export const taskQueries = {
   all: () => ['tasks'],
-  getAllTaskLists: (filters?: TasksFilterOptions) =>
+  getAllTaskLists: (filters?: Ref<TasksFilterOptions> | TasksFilterOptions) =>
     queryFactoryOptions({
       queryKey: [...taskQueries.all(), 'lists', filters],
       queryFn: (client) => async () => getAllTaskLists(client)(),
     }),
-  getTaskList: (id: string, filters?: TasksFilterOptions) =>
+  getTaskList: (id: Ref<string> | string, filters?: TasksFilterOptions) =>
     queryFactoryOptions({
       queryKey: [...taskQueries.all(), 'lists', id],
-      queryFn: (client) => async () => getTaskList(client)(id, filters),
+      queryFn: (client) => async () => getTaskList(client)(isRef(id) ? id.value : id, filters),
     }),
-  getAllTasks: (filters?: TasksFilterOptions) =>
+  getAllTasks: (filters?: Ref<TasksFilterOptions> | TasksFilterOptions) =>
     queryFactoryOptions({
       queryKey: [...taskQueries.all(), 'all', filters],
-      queryFn: (client) => async () => getAllTasks(client)(filters),
+      queryFn: (client) => async () =>
+        getAllTasks(client)(isRef(filters) ? filters.value : filters),
     }),
-  getTask: (id: string) =>
+  getTask: (id: Ref<string> | string) =>
     queryFactoryOptions({
       queryKey: [...taskQueries.all(), 'item', id],
-      queryFn: (client) => async () => getTask(client)(id),
+      queryFn: (client) => async () => getTask(client)(isRef(id) ? id.value : id),
     }),
 }

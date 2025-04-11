@@ -3,7 +3,6 @@ import Dashboard from '@/features/feat-dashboard/feat-dashboard.vue'
 import { useQueryClient } from '@tanstack/vue-query'
 import { taskQueries } from '@/api/actions/tasks/task.queries'
 import { useIndexDB } from '@/libs/composables'
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -22,17 +21,20 @@ const router = createRouter({
       },
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-    },
-    {
       path: '/task-lists/:id',
       name: 'task-list-details',
       component: () => import('@/features/feat-task-list-details/feat-task-list-details.vue'),
+      beforeEnter: async ({ params }) => {
+        const queryClient = useQueryClient()
+        const { client } = useIndexDB()
+
+        const taskListId = Array.isArray(params.id) ? params.id[0] : params.id
+
+        await queryClient.ensureQueryData({
+          queryKey: taskQueries.getTaskList(taskListId).queryKey,
+          queryFn: taskQueries.getTaskList(taskListId).queryFn(client.value!),
+        })
+      },
     },
   ],
 })

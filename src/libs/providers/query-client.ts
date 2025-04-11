@@ -37,6 +37,7 @@ const queryClient = new QueryClient({
 
 const vueQueryPluginOptions: VueQueryPluginOptions = {
   queryClient,
+  enableDevtoolsV6Plugin: true,
 }
 
 export { vueQueryPluginOptions }
