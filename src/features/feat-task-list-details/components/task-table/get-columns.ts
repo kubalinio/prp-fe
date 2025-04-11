@@ -55,7 +55,7 @@ const getColumns = ({ data }: GetColumnsProps): ColumnDef<Task>[] => [
         h(
           RouterLink,
           {
-            to: `/task-lists/${row.original.listId}/tasks/${row.original.id}`,
+            to: `/task-lists/${row.original.listId}/t/${row.original.id}`,
             class: 'line-clamp-1 w-fit flex-1 text-sm/7 whitespace-normal subtitle-2',
             title: row.original.title,
           },

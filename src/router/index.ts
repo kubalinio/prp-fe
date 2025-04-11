@@ -35,6 +35,24 @@ const router = createRouter({
           queryFn: taskQueries.getTaskList(taskListId).queryFn(client.value!),
         })
       },
+      children: [
+        {
+          path: '/task-lists/:id/t/:taskId',
+          name: 'task-list-task-details',
+          component: () => import('@/features/feat-task-details/feat-task-details.vue'),
+          beforeEnter: async ({ params }) => {
+            const queryClient = useQueryClient()
+            const { client } = useIndexDB()
+
+            const taskId = Array.isArray(params.taskId) ? params.taskId[0] : params.taskId
+
+            await queryClient.ensureQueryData({
+              queryKey: taskQueries.getTask(taskId).queryKey,
+              queryFn: taskQueries.getTask(taskId).queryFn(client.value!),
+            })
+          },
+        },
+      ],
     },
   ],
 })
